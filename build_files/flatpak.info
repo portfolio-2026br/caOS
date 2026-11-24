@@ -1,0 +1,38 @@
+# flatpak install -y flathub com.dropbox.Client
+# flatpak install -y --system flathub com.github.neithern.g4music
+# flatpak install -y --system flathub com.github.tchx84.Flatseal
+# flatpak install -y --system flathub io.github.peazip.PeaZip
+# # org.fedoraproject.MediaWriter
+# flatpak install -y --system flathub org.gimp.GIMP
+# flatpak install -y --system flathub org.gnome.Calculator
+# flatpak install -y --system flathub org.gnome.Calendar
+# # org.gnome.Characters
+# # org.gnome.Extensions
+# flatpak install -y --system flathub org.gnome.Logs
+# flatpak install -y --system flathub org.gnome.Loupe
+# # org.gnome.Maps
+# flatpak install -y --system flathub org.gnome.NautilusPreviewer
+# flatpak install -y --system flathub org.gnome.Papers
+# flatpak install -y --system flathub org.gnome.Snapshot
+# flatpak install -y --system flathub org.gnome.TextEditor
+# # org.gnome.baobab
+# flatpak install -y --system flathub org.gnome.clocks
+# # org.gnome.font-viewer
+# flatpak install -y --system flathub org.libreoffice.LibreOffice
+# flatpak install -y --system flathub org.videolan.VLC
+# flatpak install -y --system flathub org.virt_manager.virt-manager
+
+# Permissões
+# flatpak override --user --show org.videolan.VLC
+# flatpak override --user --nofilesystem=host --filesystem=xdg-download:ro org.videolan.VLC
+# flatpak info --show-permissions org.videolan.VLC
+# flatpak override --user --filesystems=/tmp;~/.dropbox-dist;~/.dropbox;~/Dropbox; com.dropbox.Client
+# flatpak override --user \
+#  # --nosocket=x11 \
+#  --unshare=ipc \
+#  --nofilesystem=home \
+#  --filesystem=~/Dropbox \
+#  --filesystem=~/.dropbox \
+#  --filesystem=~/.dropbox-dist \
+#  com.dropbox.Client
+ 
