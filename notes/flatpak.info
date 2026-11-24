@@ -1,0 +1,13 @@
+# Permissões
+#   flatpak override --user --show org.videolan.VLC
+#   flatpak override --user --nofilesystem=host --filesystem=xdg-download:ro org.videolan.VLC
+#   flatpak info --show-permissions org.videolan.VLC
+#   flatpak override --user --filesystems=/tmp;~/.dropbox-dist;~/.dropbox;~/Dropbox; com.dropbox.Client
+#   flatpak override --user \
+#    # --nosocket=x11 \
+#    --unshare=ipc \
+#    --nofilesystem=home \
+#    --filesystem=~/Dropbox \
+#    --filesystem=~/.dropbox \
+#    --filesystem=~/.dropbox-dist \
+#    com.dropbox.Client

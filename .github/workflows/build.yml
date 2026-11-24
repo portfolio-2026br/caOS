@@ -1,0 +1,55 @@
+name: bluebuild
+on:
+  schedule:
+    - cron:
+        "23 10 * * *" # build at 10:23 UTC every day
+
+  push:
+    paths-ignore: # don't rebuild if only documentation has changed
+      - "**.md"
+
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # only run one build at a time
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  bluebuild:
+    name: Build Custom Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        recipe:
+          - recipe.yml
+
+    steps:
+      # the build is fully handled by the reusable github action
+      - name: Build Custom Image
+        uses: blue-build/github-action@v1.13
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+
+          # enabled by default, disable if your image is small and you want faster builds
+          maximize_build_space: true
+
+          # rechunk the image for smaller images and smaller updates
+          # chunkah: true
+
+          # rechunk the image via `rpm-ostree compose build-chunked-oci` for smaller images and smaller updates
+          build_chunked_oci: true
+
+          # disregard previous build’s layer plan when rechunking (parece bom)
+          rechunk_clear_plan: true
+
+          # verify the cosign signature for the Blue-Build cli
+          verify_install: true

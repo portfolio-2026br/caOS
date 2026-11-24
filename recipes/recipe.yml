@@ -1,0 +1,181 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+
+name: caOS
+description: Sistema Operacional pessoal baseado em bootc caOS.
+
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: 45
+
+modules:
+  - type: files
+    files:
+      - source: system
+        destination: / # copies 'files/system/*'' into image's root folder '/'
+
+  - type: os-release
+    properties:
+      NAME: "uBlue caOS"
+      PRETTY_NAME: "uBlue caOS (Silverblue)"
+      HOME_URL: "https://github.com/portfolio-2026br/caOS"
+      CODE_NAME: caOS
+
+  - type: dnf
+    repos:
+      copr:
+        - atim/starship
+    install:
+      packages:
+        - micro
+        - starship
+
+        # Pacotes que eu selecionei
+        - htop
+        - just
+        - yaru-icon-theme
+        - yaru-theme
+
+    remove:
+      packages:
+        # GNOME
+        - gnome-classic-session
+        - gnome-shell-extension-apps-menu
+        - gnome-shell-extension-background-logo
+        - gnome-shell-extension-common
+        - gnome-shell-extension-launch-new-instance
+        - gnome-shell-extension-places-menu
+        - gnome-shell-extension-window-list
+        - papers-thumbnailer
+        - totem-video-thumbnailer
+
+        # Remove uncommon or obsolete NetworkManager plugins
+        - NetworkManager-fortisslvpn
+        - NetworkManager-iodine
+        - NetworkManager-l2tp
+        - NetworkManager-libreswan
+        - NetworkManager-pptp
+        - NetworkManager-ssh
+        - NetworkManager-ssh-selinux
+        - NetworkManager-sstp
+        - NetworkManager-strongswan
+        - NetworkManager-vpnc
+
+        # Considerado desnecessário
+        - fedora-bookmarks
+        - fedora-chromium-config
+        - fedora-chromium-config-gnome
+        - fedora-flathub-remote
+        - fedora-third-party
+        - fedora-workstation-repositories
+        - gnome-remote-desktop
+        - httpd-core
+        - libvncserver
+        - mod_dnssd
+        - mod_http2
+        - mod_lua
+
+        # # Outros
+        - firefox
+        - firefox-langpacks
+        # 1 - gnome-software-rpm-ostree
+        - gnome-tour
+        - gnome-user-share
+        - httpd
+        - malcontent-control
+        - malcontent-ui-libs
+        - nvtop
+        - orca
+        # - podman-docker
+        # 2 - samba-client
+        # - ublue-os-update-services
+        - yelp
+
+        # CUPS
+        - bluez-cups
+        - braille-printer-app
+        - c2esp
+        - cups
+        - cups-browsed
+        - cups-filters
+        - cups-filters-driverless
+        - dymo-cups-drivers
+        - gutenprint-cups
+        - hplip
+        - hplip-common
+        - hplip-libs
+        - libppd
+        - libsane-hpaio
+        - ptouch-driver
+        - splix
+
+        # VM
+        - open-vm-tools
+        - open-vm-tools-desktop
+        - virtualbox-guest-additions
+
+  - type: default-flatpaks
+    configurations:
+      - notify: true
+        scope: system
+
+        install: # system flatpaks, all users will have and cannot remove
+          - com.dropbox.Client
+          - com.github.neithern.g4music
+          - com.github.tchx84.Flatseal
+          - io.github.peazip.PeaZip
+          - org.gimp.GIMP
+          - org.gnome.Calculator
+          - org.gnome.Calendar
+          - org.gnome.clocks
+          - org.gnome.Logs
+          - org.gnome.Loupe
+          - org.gnome.NautilusPreviewer
+          - org.gnome.Papers
+          - org.gnome.Snapshot
+          - org.gnome.TextEditor
+          - org.libreoffice.LibreOffice
+          - org.videolan.VLC
+
+          # Extensions (não é GNOME)
+          - com.mattjakeman.ExtensionManager
+
+  - type: script
+    snippets:
+      - |
+        # **RUN MANUAL-DEPENDABOT**
+        wget https://obdev.at/downloads/littlesnitch-linux/littlesnitch-1.1.1-1.x86_64.rpm -O /tmp/littlesnitch.rpm
+        mkdir -p /tmp/littlesnitch
+        rpm -i --nosignature --root /tmp/littlesnitch --noscripts /tmp/littlesnitch.rpm
+        cp -R /tmp/littlesnitch /usr/local/
+
+        cp /tmp/littlesnitch/usr/lib/systemd/system/littlesnitch.service /etc/systemd/system/
+        sed -i 's|/usr/bin/littlesnitch|/usr/local/bin/littlesnitch|' /etc/systemd/system/littlesnitch.service
+
+  - type: script
+    snippets:
+      - |
+        env
+        sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"uBlue caOS (Silverblue: ${OSTREE_VERSION })\"|" /usr/lib/os-release
+
+  - type: gnome-extensions
+    install:
+      - 9975 # Better Tray Icons
+             # https://extensions.gnome.org/extension/9975/dash-to-dock/
+      - 307  # Dash-to-Dock
+             # https://extensions.gnome.org/extension/307/dash-to-dock/
+             # You can also specify PK ID number from the extension URL
+
+  - type: rpm-ostree
+    repos:
+      - vscode.repo
+      - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+    keys:
+      - https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+      - https://packages.microsoft.com/keys/microsoft.asc
+    optfix:
+      - brave.com
+    install:
+      - brave-origin
+      - code
+
+  - type: signing # proper policy & signing files for signed images
