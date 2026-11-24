@@ -1,0 +1,33 @@
+[Flatpak Preinstall com.dropbox.Client]
+
+[Flatpak Preinstall com.github.neithern.g4music]
+
+[Flatpak Preinstall com.github.tchx84.Flatseal]
+
+[Flatpak Preinstall io.github.peazip.PeaZip]
+
+[Flatpak Preinstall org.gimp.GIMP]
+
+[Flatpak Preinstall org.gnome.Calculator]
+
+[Flatpak Preinstall org.gnome.Calendar]
+
+[Flatpak Preinstall org.gnome.Logs]
+
+[Flatpak Preinstall org.gnome.Loupe]
+
+[Flatpak Preinstall org.gnome.NautilusPreviewer]
+
+[Flatpak Preinstall org.gnome.Papers]
+
+[Flatpak Preinstall org.gnome.Snapshot]
+
+[Flatpak Preinstall org.gnome.TextEditor]
+
+[Flatpak Preinstall org.gnome.clocks]
+
+[Flatpak Preinstall org.libreoffice.LibreOffice]
+
+[Flatpak Preinstall org.videolan.VLC]
+
+[Flatpak Preinstall org.virt_manager.virt-manager]
