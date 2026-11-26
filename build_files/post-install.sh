@@ -26,19 +26,6 @@ done
 
 echo "::endgroup::"
 
-echo "::group:: === Cleanup ==="
-# Remove tmp files and everything in dirs that make bootc unhappy
-rm -rf /tmp/* || true
-rm -rf /run/dnf || true
-rm -rf /usr/etc
-rm -rf /boot && mkdir /boot
-
-# Preserve cache mounts
-find /var/* -maxdepth 0 -type d \! -name cache \! -name log \! -name tmp -exec rm -rf {} \;
-find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 -exec rm -rf {} \;
-
-echo "::endgroup::"
-
 echo "::group:: === Ajustes ==="
 sed -i 's/http:/https:/g' /usr/lib/NetworkManager/conf.d/20-connectivity-fedora.conf
 
@@ -83,5 +70,31 @@ systemctl disable    serial-getty@ttyS0.service pcscd.service gssproxy.service m
 # auto-cpufreq is an automatic CPU speed and power optimizer for Linux.
 # mcelog.service failed
 # mcelog: mcelog: ERROR: AMD Processor family 23: mcelog does not support this processor.  Please use the edac_mce_amd module instead.
+
+### Ajusta permissões ##########################################################
+chmod 440 /etc/sudoers
+
+### Configurações de login #####################################################
+authselect select local with-faillock without-nullok with-silent-lastlog --force
+
+### Configurar parâmetros do kernel ############################################
+# rpm-ostree kargs --delete-if-present=console=tty0 --delete-if-present=console=ttyS0 \
+#     --append-if-missing=rhgb --append-if-missing=quiet
+#
+# Em caso de problemas de resolução
+# sudo cp ~/.config/monitors.xml /etc/xdg/monitors.xml
+
+echo "::endgroup::"
+
+echo "::group:: === Cleanup ==="
+# Remove tmp files and everything in dirs that make bootc unhappy
+rm -rf /tmp/* || true
+rm -rf /run/dnf || true
+rm -rf /usr/etc
+rm -rf /boot && mkdir /boot
+
+# Preserve cache mounts
+find /var/* -maxdepth 0 -type d \! -name cache \! -name log \! -name tmp -exec rm -rf {} \;
+find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 -exec rm -rf {} \;
 
 echo "::endgroup::"
