@@ -1,0 +1,35 @@
+type: files
+
+etc:
+  - arquivo: 50-dot.conf
+    destino: /etc/systemd/resolved.conf.d/
+  - arquivo: 50-hardening-blacklist.conf
+    destino: /etc/modprobe.d/
+  - arquivo: 50-mac-randomization.conf
+    destino: /etc/NetworkManager/conf.d/
+  - arquivo: 99-hardening.conf
+    destino: /etc/sysctl.d/
+  - arquivo: chrony.conf
+    destino: /etc/
+  - arquivo: dnf.conf
+    destino: /etc/dnf/
+  - arquivo: faillock.conf
+    destino: /etc/security/
+  - arquivo: hostname
+    destino: /etc/
+  - arquivo: sudoers
+    destino: /etc/
+
+usr:
+  - arquivo: all.preinstall
+    destino: /usr/share/flatpak/
+  - arquivo: pixmaps/caOS.png
+    destino: /usr/share/
+  - arquivo: pixmaps/fedora-logo-sprite.svg
+    destino: /usr/share/
+  - arquivo: pixmaps/fedora_whitelogo_med.png
+    destino: /usr/share/
+  - arquivo: wallpapers/Campo.jpg
+    destino: /usr/share/
+  - arquivo: wallpapers/Muralha.jpg
+    destino: /usr/share/

@@ -1,0 +1,99 @@
+type: systemd
+
+system:
+  disabled:
+    - rpm-ostree-countme.timer
+    - rpm-ostree-countme.service
+
+    # We intentionally don't mask the services, because
+    # some users may want to use it. But we disable it by default
+    # to reduce attack surface, since we don't use it by default.
+    # - systemd-homed-activate.service
+    # - systemd-homed-firstboot.service
+    # - systemd-homed.service
+
+    - alsa-state.service
+    - flatpak-add-fedora-repos.service
+    - ModemManager.service
+    - geoclue.service
+
+    # Unconfined rootful services
+    - uresourced.service
+
+    - sshd.service
+    - sshd.socket
+    - sshd-keygen.target
+
+    - sssd.service
+    - sssd-kcm.service
+    - sssd-kcm.socket
+
+    - avahi-daemon.socket
+    - avahi-daemon.service
+
+    - serial-getty@ttyS0.service
+    - pcscd.service
+    - mcelog.service
+
+  masked:
+    - rpm-ostree-countme.timer
+    - rpm-ostree-countme.service
+
+    # For more info, see https://blog.nsrun.io/2026/01/15/systemd-vsock-openssh-server/
+    - sshd-vsock.socket
+
+    # NFS daemons
+    - gssproxy.service
+    - nfs-blkmap.service
+    - nfs-client.target
+    - nfs-idmapd.service
+    - nfs-mountd.service
+    - nfs-server.service
+    - nfs-utils.service
+    - nfsdcld.service
+    - rpc-gssd.service
+    - rpc-statd-notify.service
+    - rpc-statd.service
+    - rpc_pipefs.target
+    - rpcbind.service
+    - rpcbind.socket
+    - rpcbind.target
+    - var-lib-nfs-rpc_pipefs.mount
+
+    - alsa-state.service
+    - flatpak-add-fedora-repos.service
+    - ModemManager.service
+    - geoclue.service
+
+    # Unconfined rootful services
+    - uresourced.service
+    - low-memory-monitor.service
+    - thermald.service
+
+    - cups.socket
+    - cups.service
+    - cups-browsed.service
+
+    - sshd.service
+    - sshd.socket
+    - sshd-unix-local.socket
+    - sshd-keygen.target
+
+    - sssd.service
+    - sssd-kcm.service
+    - sssd-kcm.socket
+
+    - iscsid.service
+    - iscsid.socket
+    - iscsiuio.service
+    - iscsiuio.socket
+
+    - avahi-daemon.socket
+    - avahi-daemon.service
+
+    # Unsandboxed rootful helper service for system flatpak installation
+    - flatpak-system-helper.service
+
+    - mdmonitor.service
+    - switcheroo-control
+    - passim.service

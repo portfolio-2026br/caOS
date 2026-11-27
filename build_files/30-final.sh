@@ -26,9 +26,7 @@ done
 
 echo "::endgroup::"
 
-echo "::group:: === Ajustes ==="
-sed -i 's/http:/https:/g' /usr/lib/NetworkManager/conf.d/20-connectivity-fedora.conf
-
+echo "::group:: === Remove Undesired Files ==="
 # Arquivos indesejados
 rm /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 rm /etc/yum.repos.d/_copr_rok-cdemu.repo
@@ -40,49 +38,49 @@ rm /etc/xdg/autostart/ibus-mozc-launch-xwayland.desktop
 
 echo "::endgroup::"
 
-echo "::group:: === Final ==="
-# Usar Yaru como tema (código comentado precisa ser executado manualmente)
-# -> gsettings set org.gnome.desktop.interface icon-theme 'Yaru'
-# -> gsettings set org.gnome.desktop.interface gtk-theme 'Yaru'
-# -> gsettings set org.gnome.desktop.wm.preferences theme 'Yaru'
-# -> gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
+echo "::group:: === Services ==="
+### Serviços ###################################################################
+DISABLED=( $(yq .system.disabled.[] /ctx/systemd.yaml) )
+MASKED=( $(yq .system.masked.[] /ctx/systemd.yaml) )
 
-# -> gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
-# -> gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-# -> gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/wallpapers/Muralha.jpg'
-# -> gsettings set org.gnome.desktop.background picture-uri-dark "file:///usr/share/wallpapers/Muralha.jpg"
+systemctl disable    "${DISABLED[@]}"
+systemctl mask --now "${MASKED[@]}"
 
-# -> flatpak preinstall -y
+# Copiar arquivos de configuração em /etc
+ORIGEM=( $(yq .etc[].arquivo /ctx/files.yaml) )
+contador=0
 
-# gvfs starts wsdd, which then opens port *. Pacote não pode ser removido.
-# -> gsettings set org.gnome.system.wsdd display-mode 'disabled'
+for arquivo in "${ORIGEM[@]}"; do
+    destino=$(yq .etc[$contador].destino /ctx/files.yaml)
+    echo "Copiando etc/$arquivo para $destino$arquivo"
+    mkdir -p "$destino"
+    cp "ctx/files/etc/$arquivo" "$destino$arquivo"
+    ((contador=contador+1))
+done
 
-### Mask only what a machine will never use ####################################
-# Serviços que eu não preciso
-systemctl mask --now avahi-daemon.service avahi-daemon.socket # cups.service cups.socket cups.path
+# Copiar arquivos de configuração em /usr
+ORIGEM=( $(yq .usr[].arquivo /ctx/files.yaml) )
+contador=0
 
-# Serviços sem utilidade para mim
-systemctl mask --now geoclue ModemManager.service mdmonitor.service switcheroo-control passim.service
-systemctl disable    serial-getty@ttyS0.service pcscd.service gssproxy.service mcelog.service
+for arquivo in "${ORIGEM[@]}"; do
+    destino=$(yq .usr[$contador].destino /ctx/files.yaml)
+    echo "Copiando usr/$arquivo para $destino$arquivo"
+    mkdir -p "$destino"
+    cp "ctx/files/usr/$arquivo" "$destino$arquivo"
+    ((contador=contador+1))
+done
 
-# Avaliar
-# Check -> systemctl list-units --type=service --state=running --no-pager
-# auto-cpufreq is an automatic CPU speed and power optimizer for Linux.
-# mcelog.service failed
-# mcelog: mcelog: ERROR: AMD Processor family 23: mcelog does not support this processor.  Please use the edac_mce_amd module instead.
+echo "::endgroup::"
+
+echo "::group:: === Final Adjustments ==="
+### Substitui referência HTTP -> HTTPS #########################################
+sed -i 's/http:/https:/g' /usr/lib/NetworkManager/conf.d/20-connectivity-fedora.conf
 
 ### Ajusta permissões ##########################################################
 chmod 440 /etc/sudoers
 
 ### Configurações de login #####################################################
 authselect select local with-faillock without-nullok with-silent-lastlog --force
-
-### Configurar parâmetros do kernel ############################################
-# rpm-ostree kargs --delete-if-present=console=tty0 --delete-if-present=console=ttyS0 \
-#     --append-if-missing=rhgb --append-if-missing=quiet
-#
-# Em caso de problemas de resolução
-# sudo cp ~/.config/monitors.xml /etc/xdg/monitors.xml
 
 echo "::endgroup::"
 

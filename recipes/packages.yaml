@@ -1,0 +1,88 @@
+type: dnf
+
+install:
+  packages:
+    - gnome-extensions-app
+    - htop
+    - just
+    - yaru-icon-theme
+    - yaru-theme
+
+remove:
+  packages:
+    # GNOME
+    - gnome-classic-session
+    - gnome-shell-extension-apps-menu
+    - gnome-shell-extension-background-logo
+    - gnome-shell-extension-common
+    - gnome-shell-extension-launch-new-instance
+    - gnome-shell-extension-places-menu
+    - gnome-shell-extension-window-list
+    - papers-thumbnailer
+    - totem-video-thumbnailer
+
+    # Remove uncommon or obsolete NetworkManager plugins
+    - NetworkManager-fortisslvpn
+    - NetworkManager-iodine
+    - NetworkManager-l2tp
+    - NetworkManager-libreswan
+    - NetworkManager-pptp
+    - NetworkManager-ssh
+    - NetworkManager-ssh-selinux
+    - NetworkManager-sstp
+    - NetworkManager-strongswan
+    - NetworkManager-vpnc
+
+    # Considerado desnecessário
+    - fedora-bookmarks
+    - fedora-chromium-config
+    - fedora-chromium-config-gnome
+    - fedora-flathub-remote
+    - fedora-third-party
+    - fedora-workstation-repositories
+    - gnome-remote-desktop
+    - httpd-core
+    - libvncserver
+    - mod_dnssd
+    - mod_http2
+    - mod_lua
+
+    # Outros
+    - cosign
+    - firefox
+    - firefox-langpacks
+    - gnome-software-rpm-ostree
+    - gnome-tour
+    - gnome-user-share
+    - httpd
+    - malcontent-control
+    - malcontent-ui-libs
+    - nvtop
+    - orca
+    - podman-docker
+    - samba-client
+    - ublue-os-update-services
+    - yelp
+
+    # CUPS
+    - bluez-cups
+    - braille-printer-app
+    - c2esp
+    - cups
+    - cups-browsed
+    - cups-filters
+    - cups-filters-driverless
+    - dymo-cups-drivers
+    - gutenprint-cups
+    - hplip
+    - hplip-common
+    - hplip-libs
+    - libppd
+    - libsane-hpaio
+    - ptouch-driver
+    - splix
+
+    # VM
+    - open-vm-tools
+    - open-vm-tools-desktop
+    - virtualbox-guest-additions
