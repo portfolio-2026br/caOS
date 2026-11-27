@@ -5,10 +5,10 @@ Em desenvolvimento e testes.
 # ── Arquivos adicionados ────────────────────────
 
 ```txt
-/etc/modprobe.d/50-hardening-blacklist.conf     # Bloqueii alguns files systems
+/etc/modprobe.d/50-hardening-blacklist.conf             # Bloqueii alguns files systems
 /etc/NetworkManager/conf.d/50-mac-randomization.conf    # Randomização de mac no Wifi
-/etc/sysctl.d/99-hardening.conf                 # Hardening no OS
-/etc/systemd/resolved.conf.d/50-dot.conf        # DoT, DNSSEC obrigatório
+/etc/sysctl.d/99-hardening.conf                         # Hardening no OS
+/etc/systemd/resolved.conf.d/50-dot.conf                # DoT, DNSSEC obrigatório
 ```
 
 # ── Arquivos alterados ──────────────────────────

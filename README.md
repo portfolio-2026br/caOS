@@ -1,7 +1,10 @@
 # caOS
 
-Estas são minhas versões personalizadas da imagem “Universal Blue”, com alguns ajustes para tornar o sistema mais seguro
-e personalizado.
+Esta é minha distro Linux de uso pessoal baseada no “Universal Blue”. Ajustes foram feitos para tornar o sistema mais
+limpo, seguro e personalizado através do uso de configurações default seguras e auditadas.
+
+Neste momento, a distro é baseada no Fedora Silverblue, mas seria interessante no futuro baseá-la no
+[Fedora Hummingbird](https://fedoramagazine.org/fedora-hummingbird-linux-taking-the-hummingbird-model-to-the-full-os/).
 
 ## Situação Atual
 
@@ -14,7 +17,6 @@ O "novo" sistema operacional funciona adequadamente:
 
 ### Notas e Problemas Encontrados
 
-- Plymouth (boot gráfico com imagens e "animação") não funciona. Encontrei outras pessoas apontando o mesmo problema.
 - Não consigo instalar o Little Snitch durante o build, mas a instalação posterior funciona normalmente.
 
 Para migrar para meu OS:
@@ -26,18 +28,18 @@ Situação do OS:
 - Use `rpm-ostree status`;
 - Ou `sudo bootc status`.
 
-#### Checagem e Atualização do OS
+#### Atualização do OS
 
-Para apenas verificar se há atualizações use a opção `--check`. Há muita semelhança entre os comandos `rpm-ostree` e
-`bootc`.
+Para apenas verificar se há atualizações adicione a opção `--check` ao comando. Note que há muita semelhança entre os
+comandos `rpm-ostree` e `bootc`.
 
 - O comando `rpm-ostree upgrade [--check]` funciona;
 - O `sudo bootc upgrade [--check]` funciona mas é frágil: não podem existir pacotes layered.
 
 Próximos Passos:
 
-- Refazer o processo de hardening e verificar o que pode ser aplicado à criação da imagem.
-- Copiar hardening de alguma distro focada nisto.
+- Copiar hardening da distro `secureblue`.
 - Dúvidas:
   - Ocorre alguma notificação automática que há uma versão nova do OS que eu posso instalar?
-    - Nem no Silverblue acontece. Então, a resposta é não.
+    - Nem no Silverblue acontece. Então, a resposta é não;
+    - Faça uma checagem manual usando `sudo bootc upgrade --check`.
